@@ -1,0 +1,68 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-center">Importer une IRM</h2>
+<div class="border border-2 border-light-subtle rounded p-5 text-center bg-light mb-5">
+  <i class="bi bi-upload fs-1 text-primary"></i>
+  <p class="mb-3">Glissez-déposez votre image IRM, ou cliquez pour sélectionner un fichier</p>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" class="form-control mb-3" accept="image/*" required>
+    <button class="btn btn-primary">Sélectionner un fichier</button>
+  </form>
+</div>
+
+{% if latest_confirmation %}
+  <div class="card shadow-sm border-success mt-5">
+    <div class="card-header bg-success text-white">
+      <i class="bi bi-clipboard2-check-fill me-2"></i> Confirmation Médicale
+    </div>
+    <div class="card-body">
+      <h5 class="card-title text-success">🧠 Diagnostic validé</h5>
+      <p class="card-text">
+        Le docteur a examiné votre image IRM et a confirmé le diagnostic suivant :
+      </p>
+      <div class="alert alert-light border-start border-4 border-primary">
+        <strong class="text-primary fs-5">{{ latest_confirmation }}</strong>
+      </div>
+      <p class="text-muted mb-0"><i class="bi bi-info-circle"></i> Si vous avez des questions, veuillez consulter votre médecin référent.</p>
+    </div>
+  </div>
+{% endif %}
+
+<hr>
+
+<h3 id="rdv" class="mb-3">📅 Prendre un rendez-vous</h3>
+<form method="POST" action="/rendezvous">
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <input type="text" name="nom" class="form-control" placeholder="Nom complet" required>
+    </div>
+    <div class="col-md-6">
+      <input type="tel" name="telephone" class="form-control" placeholder="Numéro de téléphone" required>
+    </div>
+    <div class="col-md-6">
+      <input type="date" name="date" class="form-control" required>
+    </div>
+    <div class="col-md-6">
+      <input type="time" name="heure" class="form-control" required>
+    </div>
+    <div class="col-12">
+      <textarea class="form-control" name="notes" placeholder="Notes supplémentaires" rows="3"></textarea>
+    </div>
+  </div>
+  <div class="text-center">
+    <button type="submit" class="btn btn-primary">Demander un rendez-vous</button>
+  </div>
+</form>
+
+{% if latest_confirmation %}
+  <div class="alert alert-info mt-4">
+    🩺 Le docteur a confirmé votre diagnostic : <strong>{{ latest_confirmation }}</strong>
+  </div>
+{% endif %}
+
+
+{% if rendezvous_message %}
+  <div class="alert alert-success mt-4 text-center">{{ rendezvous_message }}</div>
+{% endif %}
+{% endblock %}

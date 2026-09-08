@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="text-center mb-4">👨‍⚕️ Vue Médecin – Validation & Rendez-vous</h2>
+
+{% if image_path and prediction %}
+  <div class="text-center mb-5">
+    <img src="{{ image_path }}" alt="IRM" class="img-fluid rounded shadow-sm" style="max-width: 300px;">
+    <h4 class="mt-3">🧠 Prédiction IA : <span class="text-primary">{{ prediction }}</span></h4>
+    <p><strong>Patient :</strong> {{ patient_id }}</p>
+
+    <form method="POST">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="confirmation" value="Positif" required>
+        <label class="form-check-label">Positif</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="confirmation" value="Négatif" required>
+        <label class="form-check-label">Négatif</label>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-success">Confirmer</button>
+      </div>
+    </form>
+
+    <!-- 📝 Formulaire de rapport -->
+    <div class="mt-5">
+      <h4>📝 Rédiger un rapport médical</h4>
+      <form method="POST" action="/rapport">
+        <div class="mb-3">
+          <textarea name="rapport" class="form-control" rows="4" placeholder="Écrire ici votre rapport..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Enregistrer le rapport</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
+<!-- 📋 Section Rendez-vous -->
+<h3 class="mt-5">📋 Rendez-vous en attente</h3>
+{% if rdvs %}
+  <table class="table table-bordered table-striped mt-3">
+    <thead class="table-light">
+      <tr>
+        <th>Nom</th>
+        <th>Téléphone</th>
+        <th>Date</th>
+        <th>Heure</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rdv in rdvs %}
+        <tr>
+          <td>{{ rdv.nom }}</td>
+          <td>{{ rdv.telephone }}</td>
+          <td>{{ rdv.date }}</td>
+          <td>{{ rdv.heure }}</td>
+          <td>{{ rdv.notes }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p class="text-muted">Aucun rendez-vous enregistré.</p>
+{% endif %}
+
+<!-- 🗂️ Affichage des rapports -->
+<h3 class="mt-5">🗂️ Rapports enregistrés</h3>
+<div class="row">
+  {% for rapport in rapports %}
+    <div class="col-md-4">
+      <div class="card shadow-sm mb-3" style="min-height: 150px;">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-journal-text"></i> Rapport #{{ loop.index }}</h5>
+          <p class="card-text">{{ rapport }}</p>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-muted">Aucun rapport pour le moment.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+.pytest_cache/
+.vscode/
+
+# User-uploaded medical images and generated files
+static/uploads/*
+!static/uploads/.gitkeep
